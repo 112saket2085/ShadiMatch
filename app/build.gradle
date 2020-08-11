@@ -3,15 +3,18 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
-
     defaultConfig {
         applicationId "com.example.shaadimatch"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "SCHEME", "\"${SCHEME}\""
+        buildConfigField "String", "HOST_NAME", "\"${HOST_NAME}\""
+        buildConfigField "String", "PORT_NAME", "\"${PORT_NAME}\""
+        buildConfigField "String", "SUPPORT_URL", "\"${SUPPORT_URL}\""
+        buildConfigField "String", "BASE_URL", "\"${SCHEME + HOST_NAME + ":" + PORT_NAME + SUPPORT_URL}\""
     }
 
     buildTypes {
@@ -34,4 +37,10 @@ dependencies {
     //ButterKnife
     implementation "com.jakewharton:butterknife:10.2.1"
     annotationProcessor "com.jakewharton:butterknife-compiler:10.2.1"
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+    //okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
 }
