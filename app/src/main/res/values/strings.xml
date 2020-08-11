@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Shaadi Match</string>
+    <string name="str_invitations">Invitations</string>
 </resources>
