@@ -1,6 +1,12 @@
 package com.example.shaadimatch.view.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import com.example.shaadimatch.MainActivity;
+import com.example.shaadimatch.app.App;
+import com.example.shaadimatch.view.activity.MainActivity;
+
+import java.util.Objects;
+
 import butterknife.ButterKnife;
 
 /**
@@ -59,5 +69,25 @@ public abstract class BaseFragment extends Fragment {
     void showLongToast(String msg) {
         Toast.makeText(getParentActivity(),msg,Toast.LENGTH_LONG).show();
     }
+
+    static boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) App.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                if (networkInfo != null) {
+                    return (networkInfo.isConnected() && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || networkInfo.getType() == ConnectivityManager.TYPE_MOBILE));
+                }
+            } else {
+                final Network network = connectivityManager.getActiveNetwork();
+                if (network != null) {
+                    final NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(network);
+                    return (Objects.requireNonNull(networkCapabilities).hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
+                }
+            }
+        }
+        return false;
+    }
+
 
 }
