@@ -12,4 +12,5 @@
     <color name="color_decline_selector">#f6f6f6</color>
     <color name="color_accept_selector">#CC44C78C</color>
     <color name="color_accept">#44C78C</color>
+    <color name="bg_color">#F0F0F0</color>
 </resources>
