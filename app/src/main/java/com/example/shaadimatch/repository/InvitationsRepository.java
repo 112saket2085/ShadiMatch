@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.shaadimatch.R;
 import com.example.shaadimatch.app.App;
 import com.example.shaadimatch.rest.response.ResponseView;
-import com.example.shaadimatch.room.dao.ShadiMatchesDAO;
+import com.example.shaadimatch.room.dao.InvitationsDAO;
 import com.example.shaadimatch.room.database.RoomSqliteDatabase;
-import com.example.shaadimatch.room.entity.ShadiMatchesModel;
+import com.example.shaadimatch.room.entity.InvitationsModel;
 import com.example.shaadimatch.viewmodel.model.BaseApiResponse;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
@@ -20,22 +20,22 @@ import retrofit2.Response;
  * Created by SAKET on 11/08/2020
  * Class that call api and store results.
  */
-public class ShadiMatchesRepository {
+public class InvitationsRepository {
 
-    private static ShadiMatchesRepository invitationRepository;
+    private static InvitationsRepository invitationRepository;
     private MutableLiveData<BaseApiResponse.InvitationEvent> mutableLiveData;
-    private static ShadiMatchesDAO shadiMatchesDAO;
+    private static InvitationsDAO shadiMatchesDAO;
 
-    public static ShadiMatchesRepository getInstance() {
+    public static InvitationsRepository getInstance() {
         if(invitationRepository==null) {
-            invitationRepository = new ShadiMatchesRepository();
+            invitationRepository = new InvitationsRepository();
         }
         return invitationRepository;
     }
 
-    public ShadiMatchesRepository() {
+    private InvitationsRepository() {
         RoomSqliteDatabase roomSqliteDatabase = RoomSqliteDatabase.getInstance(App.getAppContext());
-        shadiMatchesDAO = roomSqliteDatabase.getShadiMatchDAO();
+        shadiMatchesDAO = roomSqliteDatabase.getInvitationsDAO();
     }
 
     /**
@@ -45,9 +45,9 @@ public class ShadiMatchesRepository {
      */
     public LiveData<BaseApiResponse.InvitationEvent> getResponse(int count) {
         mutableLiveData = new MutableLiveData<>();
-        App.getInstance().getApiFactory().getShadiApi().getInvitationList().enqueue(new Callback<ResponseView.ShadiMatchesResponseData>() {
+        App.getInstance().getApiFactory().getShadiApi().getInvitationList().enqueue(new Callback<ResponseView.InvitationsResponseData>() {
             @Override
-            public void onResponse(@NotNull Call<ResponseView.ShadiMatchesResponseData> call, @NotNull Response<ResponseView.ShadiMatchesResponseData> response) {
+            public void onResponse(@NotNull Call<ResponseView.InvitationsResponseData> call, @NotNull Response<ResponseView.InvitationsResponseData> response) {
                 if (response.isSuccessful()) {
                     mutableLiveData.setValue(new BaseApiResponse.InvitationEvent(true, "",response.body()));
                 } else {
@@ -56,7 +56,7 @@ public class ShadiMatchesRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<ResponseView.ShadiMatchesResponseData> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<ResponseView.InvitationsResponseData> call, @NotNull Throwable t) {
                 mutableLiveData.setValue(new BaseApiResponse.InvitationEvent(true, App.getInstance().getString(R.string.str_server_error),null));
             }
         });
@@ -66,8 +66,8 @@ public class ShadiMatchesRepository {
     /**
      * @return LiveData Object that return list of all notes in room database.
      */
-    public LiveData<List<ShadiMatchesModel>> getShadiMatchList() {
-        return shadiMatchesDAO.getShadiMatchList();
+    public LiveData<List<InvitationsModel>> getShadiMatchList() {
+        return shadiMatchesDAO.getInvitationsList();
     }
 
 
@@ -76,7 +76,7 @@ public class ShadiMatchesRepository {
      *
      * @param shadiMatchesModelList Shadi Match List
      */
-    public void addData(List<ShadiMatchesModel> shadiMatchesModelList) {
+    public void addData(List<InvitationsModel> shadiMatchesModelList) {
         new AddDataAsyncTask().execute(shadiMatchesModelList);
     }
 
@@ -85,7 +85,7 @@ public class ShadiMatchesRepository {
      *
      * @param shadiMatchesModel Shadi Match Model
      */
-    public void updateData(ShadiMatchesModel shadiMatchesModel) {
+    public void updateData(InvitationsModel shadiMatchesModel) {
         new UpdateDataAsyncTask().execute(shadiMatchesModel);
     }
 
@@ -93,11 +93,11 @@ public class ShadiMatchesRepository {
     /**
      * AddImageNote Async Task to add image note to room database.
      */
-    private static class AddDataAsyncTask extends AsyncTask<List<ShadiMatchesModel>, Void, Void> {
+    private static class AddDataAsyncTask extends AsyncTask<List<InvitationsModel>, Void, Void> {
         @SafeVarargs
         @Override
-        protected final Void doInBackground(List<ShadiMatchesModel>... lists) {
-            List<ShadiMatchesModel> list=lists[0];
+        protected final Void doInBackground(List<InvitationsModel>... lists) {
+            List<InvitationsModel> list=lists[0];
             shadiMatchesDAO.addData(list);
             return null;
         }
@@ -107,13 +107,13 @@ public class ShadiMatchesRepository {
     /**
      * AddImageNote Async Task to add image note to room database.
      */
-    private static class UpdateDataAsyncTask extends AsyncTask<ShadiMatchesModel, Void, Void> {
+    private static class UpdateDataAsyncTask extends AsyncTask<InvitationsModel, Void, Void> {
         @Override
-        protected final Void doInBackground(ShadiMatchesModel... shadiMatchesModels) {
-            ShadiMatchesModel shadiMatchesModel = shadiMatchesModels[0];
-            ShadiMatchesModel shadiDataModel = shadiMatchesDAO.getShadiModel(shadiMatchesModel.getId());
+        protected final Void doInBackground(InvitationsModel... shadiMatchesModels) {
+            InvitationsModel shadiMatchesModel = shadiMatchesModels[0];
+            InvitationsModel shadiDataModel = shadiMatchesDAO.getInvitationModel(shadiMatchesModel.getId());
             if(shadiDataModel!=null) {
-                shadiDataModel.setStatus(shadiMatchesModel.getStatus());
+                shadiDataModel.setInvitationStatus(shadiMatchesModel.getInvitationStatus());
                 shadiMatchesDAO.updateData(shadiDataModel);
             }
             return null;

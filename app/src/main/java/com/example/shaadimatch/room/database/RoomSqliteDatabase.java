@@ -4,11 +4,15 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import com.example.shaadimatch.room.dao.InvitationsDAO;
+import com.example.shaadimatch.room.entity.InvitationsModel;
 
-import com.example.shaadimatch.room.dao.ShadiMatchesDAO;
-import com.example.shaadimatch.room.entity.ShadiMatchesModel;
+/**
+ * Created by SAKET on 11/08/2020
+ * RoomSqliteDatabase for accessing database queries
+ */
 
-@Database(entities = {ShadiMatchesModel.class},version = 1,exportSchema = false)
+@Database(entities = {InvitationsModel.class},version = 1,exportSchema = false)
 public abstract class RoomSqliteDatabase extends RoomDatabase {
 
     private static RoomSqliteDatabase instance;
@@ -19,7 +23,7 @@ public abstract class RoomSqliteDatabase extends RoomDatabase {
      */
     public static RoomSqliteDatabase getInstance(Context context) {
         if(instance==null) {
-            instance = Room.databaseBuilder(context,RoomSqliteDatabase.class,"notes_db").build();
+            instance = Room.databaseBuilder(context,RoomSqliteDatabase.class,"shadi_db").build();
         }
         return instance;
     }
@@ -28,7 +32,7 @@ public abstract class RoomSqliteDatabase extends RoomDatabase {
      *
      * @return NoteDAO instance to access CRUD operations.
      */
-    public abstract ShadiMatchesDAO getShadiMatchDAO();
+    public abstract InvitationsDAO getInvitationsDAO();
 
     /**
      *  Method to clear database instance

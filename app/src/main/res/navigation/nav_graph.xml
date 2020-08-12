@@ -6,8 +6,8 @@
     app:startDestination="@id/fragment_shadi_matches">
 
     <fragment android:id="@+id/fragment_shadi_matches"
-        android:name="com.example.shaadimatch.view.fragment.ShadiMatchesFragment"
-        tools:layout="@layout/fragment_shadi_matches"
+        android:name="com.example.shaadimatch.view.fragment.InvitationsFragment"
+        tools:layout="@layout/fragment_invitations"
         />
 
 

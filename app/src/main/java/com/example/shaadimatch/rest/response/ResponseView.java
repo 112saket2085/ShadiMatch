@@ -1,20 +1,20 @@
 package com.example.shaadimatch.rest.response;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 /**
  * Created by SAKET on 11/08/2020
+ * Class Containing response data
  */
 public class ResponseView {
 
-    public static class ShadiMatchesResponseData {
+    public static class InvitationsResponseData {
         @SerializedName("results")
-        public List<ShadiMatchesDataModel> invitationDataModelList;
+        public List<InvitationsDataModel> invitationDataModelList;
     }
 
-    public static class ShadiMatchesDataModel {
+    public static class InvitationsDataModel {
         @SerializedName("gender")
         public String gender;
         @SerializedName("email")

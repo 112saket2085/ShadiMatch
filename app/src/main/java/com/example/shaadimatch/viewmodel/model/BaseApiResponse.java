@@ -11,9 +11,9 @@ public class BaseApiResponse {
     public static class InvitationEvent {
         private boolean isSuccess;
         private String statusDescription;
-        private ResponseView.ShadiMatchesResponseData responseView;
+        private ResponseView.InvitationsResponseData responseView;
 
-        public InvitationEvent(boolean isSuccess, String statusDescription, ResponseView.ShadiMatchesResponseData responseView) {
+        public InvitationEvent(boolean isSuccess, String statusDescription, ResponseView.InvitationsResponseData responseView) {
             this.isSuccess = isSuccess;
             this.statusDescription = statusDescription;
             this.responseView = responseView;
@@ -27,7 +27,7 @@ public class BaseApiResponse {
             return statusDescription;
         }
 
-        public ResponseView.ShadiMatchesResponseData getResponseView() {
+        public ResponseView.InvitationsResponseData getResponseView() {
             return responseView;
         }
     }

@@ -12,31 +12,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.shaadimatch.R;
 import com.example.shaadimatch.app.Constants;
 import com.example.shaadimatch.rest.response.ResponseView;
-import com.example.shaadimatch.room.entity.ShadiMatchesModel;
-import com.example.shaadimatch.view.adapter.ShadiMatchesAdapter;
-import com.example.shaadimatch.viewmodel.ShadiMatchesViewModel;
+import com.example.shaadimatch.room.entity.InvitationsModel;
+import com.example.shaadimatch.view.adapter.InvitationsAdapter;
+import com.example.shaadimatch.viewmodel.InvitationsViewModel;
 import com.example.shaadimatch.viewmodel.model.BaseApiResponse;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by SAKET on 11/08/2020
  */
-public class ShadiMatchesFragment extends BaseFragment implements ShadiMatchesAdapter.OnItemClickListener {
+public class InvitationsFragment extends BaseFragment implements InvitationsAdapter.OnItemClickListener {
 
     @BindView(R.id.recyclerView_invitations) RecyclerView recyclerView;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.textview_no_data_found) TextView textViewNoDataFound;
     @BindView(R.id.text_view_progress) TextView textViewProgress;
-    private ShadiMatchesViewModel shadiMatchesViewModel;
-    private List<ShadiMatchesModel> shadiMatchesModelList = new ArrayList<>();
-    private ShadiMatchesAdapter shadiMatchesAdapter;
+    private InvitationsViewModel invitationsViewModel;
+    private List<InvitationsModel> invitationsModelList = new ArrayList<>();
+    private InvitationsAdapter invitationsAdapter;
+    private int selectedProfilePosition=-1;
 
     @Override
     int getLayoutId() {
-        return R.layout.fragment_shadi_matches;
+        return R.layout.fragment_invitations;
     }
 
     @Override
@@ -53,16 +53,16 @@ public class ShadiMatchesFragment extends BaseFragment implements ShadiMatchesAd
     }
 
     private void initViewModel() {
-        shadiMatchesViewModel = new ViewModelProvider(getParentActivity()).get(ShadiMatchesViewModel.class);
+        invitationsViewModel = new ViewModelProvider(getParentActivity()).get(InvitationsViewModel.class);
     }
 
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getParentActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        shadiMatchesAdapter = new ShadiMatchesAdapter(shadiMatchesModelList);
-        shadiMatchesAdapter.setListener(this);
-        recyclerView.setAdapter(shadiMatchesAdapter);
+        invitationsAdapter = new InvitationsAdapter(invitationsModelList);
+        invitationsAdapter.setListener(this);
+        recyclerView.setAdapter(invitationsAdapter);
     }
 
     private void observedInvitationsData(boolean showProgress) {
@@ -72,18 +72,18 @@ public class ShadiMatchesFragment extends BaseFragment implements ShadiMatchesAd
             }
             showErrorDataInfo(View.GONE, "");
             showProgressInfo(showProgress ? View.VISIBLE : View.GONE,getString(R.string.str_loading_application));
-            shadiMatchesViewModel.getResponse(10).observe(getViewLifecycleOwner(), new Observer<BaseApiResponse.InvitationEvent>() {
+            invitationsViewModel.getResponse(10).observe(getViewLifecycleOwner(), new Observer<BaseApiResponse.InvitationEvent>() {
                 @Override
                 public void onChanged(BaseApiResponse.InvitationEvent invitationEvent) {
                     showProgressInfo(View.GONE,"");
                     if (invitationEvent.isSuccess()) {
-                        List<ResponseView.ShadiMatchesDataModel> modelList = invitationEvent.getResponseView().invitationDataModelList;
+                        List<ResponseView.InvitationsDataModel> modelList = invitationEvent.getResponseView().invitationDataModelList;
                         if (modelList != null && !modelList.isEmpty()) {
-                            List<ShadiMatchesModel> shadiMatchesList = ShadiMatchesModel.getShadiMatchesList(modelList);
-                            shadiMatchesModelList.clear();
-                            shadiMatchesModelList.addAll(shadiMatchesList);
-                            shadiMatchesAdapter.notifyDataSetChanged();
-                            addData(shadiMatchesModelList);
+                            List<InvitationsModel> invitationsList = InvitationsModel.getInvitationsModelList(modelList);
+                            invitationsModelList.clear();
+                            invitationsModelList.addAll(invitationsList);
+                            invitationsAdapter.notifyDataSetChanged();
+                            addData(invitationsModelList);
                         }
                         else {
                             showErrorDataInfo(View.VISIBLE, getString(R.string.sr_no_invitation_found));
@@ -98,7 +98,7 @@ public class ShadiMatchesFragment extends BaseFragment implements ShadiMatchesAd
         }
         else {
             showProgressInfo(View.GONE,"");
-            if(shadiMatchesModelList.isEmpty()) {
+            if(invitationsModelList.isEmpty()) {
                 showErrorDataInfo(View.VISIBLE,getString(R.string.no_internet_available_text));
                 setRetryView(getString(R.string.str_retry));
             }
@@ -106,13 +106,18 @@ public class ShadiMatchesFragment extends BaseFragment implements ShadiMatchesAd
     }
 
     private void observeOfflineShadiMatchData() {
-        shadiMatchesViewModel.getOfflineResponse().observe(getViewLifecycleOwner(), new Observer<List<ShadiMatchesModel>>() {
+        invitationsViewModel.getOfflineResponse().observe(getViewLifecycleOwner(), new Observer<List<InvitationsModel>>() {
             @Override
-            public void onChanged(List<ShadiMatchesModel> dataList) {
+            public void onChanged(List<InvitationsModel> dataList) {
                 if(dataList!=null && !dataList.isEmpty()) {
-                    shadiMatchesModelList.clear();
-                    shadiMatchesModelList.addAll(dataList);
-                    shadiMatchesAdapter.notifyDataSetChanged();
+                    invitationsModelList.clear();
+                    invitationsModelList.addAll(dataList);
+                    if(selectedProfilePosition!=-1) {
+                        invitationsAdapter.notifyItemChanged(selectedProfilePosition);
+                    }
+                    else {
+                        invitationsAdapter.notifyDataSetChanged();
+                    }
                 }
                 else {
                     observedInvitationsData(true);
@@ -122,8 +127,8 @@ public class ShadiMatchesFragment extends BaseFragment implements ShadiMatchesAd
     }
 
     private void clearList() {
-        shadiMatchesModelList.clear();
-        shadiMatchesAdapter.notifyDataSetChanged();
+        invitationsModelList.clear();
+        invitationsAdapter.notifyDataSetChanged();
     }
 
 
@@ -150,33 +155,31 @@ public class ShadiMatchesFragment extends BaseFragment implements ShadiMatchesAd
 
     /**
      * Method to add data into database
-     * @param shadiMatchesModelList ShadiModelList
+     * @param invitationsModelList InvitationList
      */
-    private void addData(List<ShadiMatchesModel> shadiMatchesModelList) {
-        shadiMatchesViewModel.addData(shadiMatchesModelList);
+    private void addData(List<InvitationsModel> invitationsModelList) {
+        invitationsViewModel.addData(invitationsModelList);
     }
 
     /**
      * Method to update data into database
-     * @param shadiMatchesModel shadi match model
+     * @param invitationsModel Invitation model
      */
-    private void updateData(ShadiMatchesModel shadiMatchesModel) {
-        shadiMatchesViewModel.updateData(shadiMatchesModel);
+    private void updateData(InvitationsModel invitationsModel) {
+        invitationsViewModel.updateData(invitationsModel);
     }
 
     @Override
-    public void onAcceptClick(ShadiMatchesModel shadiMatchesModel) {
-        int position = shadiMatchesModelList.indexOf(shadiMatchesModel);
-        shadiMatchesModel.setStatus(Constants.ACCEPTED);
-//        shadiMatchesAdapter.notifyItemChanged(position);
-        updateData(shadiMatchesModel);
+    public void onAcceptClick(InvitationsModel invitationsModel) {
+        this.selectedProfilePosition = invitationsModelList.indexOf(invitationsModel);
+        invitationsModel.setInvitationStatus(InvitationsModel.INVITATION_STATUS.ACCEPTED.getStatus());
+        updateData(invitationsModel);
     }
 
     @Override
-    public void onDeclineClick(ShadiMatchesModel shadiMatchesModel) {
-        int position = shadiMatchesModelList.indexOf(shadiMatchesModel);
-        shadiMatchesModel.setStatus(Constants.REJECTED);
-        shadiMatchesAdapter.notifyItemChanged(position);
-        updateData(shadiMatchesModel);
+    public void onDeclineClick(InvitationsModel invitationsModel) {
+        this.selectedProfilePosition = invitationsModelList.indexOf(invitationsModel);
+        invitationsModel.setInvitationStatus(InvitationsModel.INVITATION_STATUS.REJECTED.getStatus());
+        updateData(invitationsModel);
     }
 }

@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 
 /**
  * Created by SAKET on 11/08/2020
+ * Class that store all App related variables
  */
 public class App extends Application {
 

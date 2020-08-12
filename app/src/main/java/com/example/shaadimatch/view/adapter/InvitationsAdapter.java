@@ -7,30 +7,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.shaadimatch.R;
-import com.example.shaadimatch.app.Constants;
-import com.example.shaadimatch.room.entity.ShadiMatchesModel;
+import com.example.shaadimatch.room.entity.InvitationsModel;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import static com.example.shaadimatch.app.Constants.ACCEPTED;
+import static com.example.shaadimatch.app.Constants.REJECTED;
 
 /**
  * Created by SAKET on 11/08/2020
+ * Adapter class for recyclerview item
  */
-public class ShadiMatchesAdapter extends RecyclerView.Adapter<ShadiMatchesAdapter.ViewHolder> {
+public class InvitationsAdapter extends RecyclerView.Adapter<InvitationsAdapter.ViewHolder> {
 
     private Context context;
-    private List<ShadiMatchesModel> shadiMatchesModelList;
+    private List<InvitationsModel> invitationsModelList;
     private OnItemClickListener listener;
 
-    public ShadiMatchesAdapter(List<ShadiMatchesModel> shadiMatchesModelList) {
-        this.shadiMatchesModelList = shadiMatchesModelList;
+    public InvitationsAdapter(List<InvitationsModel> invitationsModelList) {
+        this.invitationsModelList = invitationsModelList;
     }
 
     public void setListener(OnItemClickListener listener) {
@@ -41,23 +40,23 @@ public class ShadiMatchesAdapter extends RecyclerView.Adapter<ShadiMatchesAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         this.context=parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.item_shadi_matches,(ViewGroup) null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_invitations,(ViewGroup) null);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final ShadiMatchesModel shadiMatchesModel = shadiMatchesModelList.get(position);
-        Glide.with(context).load(shadiMatchesModel.getProfilePicUrl()).placeholder(shadiMatchesModel.getProfilePlaceholderIcon()).into(holder.imageViewProfile);
-        holder.textViewName.setText(context.getString(R.string.str_name,shadiMatchesModel.getFirstName(),shadiMatchesModel.getLastName()));
-        holder.textViewDescription.setText(context.getString(R.string.str_description,shadiMatchesModel.getAge(),shadiMatchesModel.getState(),shadiMatchesModel.getCountry()));
-        switch (shadiMatchesModel.getStatus()) {
-            case Constants.ACCEPTED:
+        final InvitationsModel invitationsModel = invitationsModelList.get(position);
+        Glide.with(context).load(invitationsModel.getProfilePicUrl()).placeholder(invitationsModel.getProfilePlaceholderIcon()).into(holder.imageViewProfile);
+        holder.textViewName.setText(context.getString(R.string.str_name,invitationsModel.getFirstName(),invitationsModel.getLastName()));
+        holder.textViewDescription.setText(context.getString(R.string.str_description,invitationsModel.getAge(),invitationsModel.getState(),invitationsModel.getCountry()));
+        switch (invitationsModel.getInvitationStatus()) {
+            case ACCEPTED:
                 holder.relativeLayoutAction.setVisibility(View.GONE);
                 holder.textViewStatus.setVisibility(View.VISIBLE);
                 holder.textViewStatus.setText(context.getString(R.string.str_accept_status));
                 break;
-            case Constants.REJECTED:
+            case REJECTED:
                 holder.relativeLayoutAction.setVisibility(View.GONE);
                 holder.textViewStatus.setVisibility(View.VISIBLE);
                 holder.textViewStatus.setText(context.getString(R.string.str_reject_status));
@@ -71,7 +70,7 @@ public class ShadiMatchesAdapter extends RecyclerView.Adapter<ShadiMatchesAdapte
             @Override
             public void onClick(View v) {
                 if(listener!=null) {
-                    listener.onAcceptClick(shadiMatchesModel);
+                    listener.onAcceptClick(invitationsModel);
                 }
             }
         });
@@ -79,7 +78,7 @@ public class ShadiMatchesAdapter extends RecyclerView.Adapter<ShadiMatchesAdapte
             @Override
             public void onClick(View v) {
                 if(listener!=null) {
-                    listener.onDeclineClick(shadiMatchesModel);
+                    listener.onDeclineClick(invitationsModel);
                 }
             }
         });
@@ -88,7 +87,7 @@ public class ShadiMatchesAdapter extends RecyclerView.Adapter<ShadiMatchesAdapte
 
     @Override
     public int getItemCount() {
-        return shadiMatchesModelList.size();
+        return invitationsModelList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -101,15 +100,15 @@ public class ShadiMatchesAdapter extends RecyclerView.Adapter<ShadiMatchesAdapte
         @BindView(R.id.image_view_accept) ImageView imageViewAccept;
         @BindView(R.id.image_view_decline) ImageView imageViewDecline;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
     }
 
     public interface OnItemClickListener {
-        void onAcceptClick(ShadiMatchesModel shadiMatchesModel);
-        void onDeclineClick(ShadiMatchesModel shadiMatchesModel);
+        void onAcceptClick(InvitationsModel shadiMatchesModel);
+        void onDeclineClick(InvitationsModel shadiMatchesModel);
     }
 
 }

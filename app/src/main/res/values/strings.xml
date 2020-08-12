@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Shaadi Match</string>
+
+    <!--Invitation Fragment-->
     <string name="str_invitations">Invitations</string>
     <string name="str_loading_application">Fetching Invitations</string>
     <string name="sr_no_invitation_found">No Invitations Found</string>
@@ -7,7 +9,10 @@
     <string name="str_retry">Retry</string>
     <string name="str_server_error">Server Not Responding</string>
     <string name="str_name">%s %s</string>
-    <string name="str_description">%s, %s %s</string>
+    <string name="str_description">%s, %s, %s</string>
     <string name="str_accept_status">Member Accepted</string>
     <string name="str_reject_status">Member Declined</string>
+    <string name="str_accept">Accept</string>
+    <string name="str_decline">Decline</string>
+    <string name="str_user_profile">Profile Picture</string>
 </resources>

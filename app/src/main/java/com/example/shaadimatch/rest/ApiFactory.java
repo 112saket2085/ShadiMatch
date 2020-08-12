@@ -17,13 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiFactory {
 
     private ShadiApi shadiApi;
-    private static ApiFactory retrofitClient;
-    public static ApiFactory getInstance() {
-        if (retrofitClient == null) {
-            retrofitClient = new ApiFactory();
-        }
-        return retrofitClient;
-    }
 
     public ApiFactory() {
         init();
@@ -48,9 +41,8 @@ public class ApiFactory {
                 return hostname.equalsIgnoreCase(BuildConfig.HOST_NAME);
             }
         });
-        httpBuilder.connectTimeout(4, TimeUnit.MINUTES);
-        httpBuilder.readTimeout(4, TimeUnit.MINUTES);
-//        SSLManager.setSslSocketFactory(httpBuilder);
+        httpBuilder.connectTimeout(2, TimeUnit.MINUTES);
+        httpBuilder.readTimeout(2, TimeUnit.MINUTES);
         return httpBuilder.build();
     }
 

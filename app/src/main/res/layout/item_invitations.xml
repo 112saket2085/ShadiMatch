@@ -4,12 +4,13 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="15dp"
-    android:layout_marginBottom="15dp">
+    android:layout_marginBottom="5dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -18,20 +19,21 @@
 
           <de.hdodenhof.circleimageview.CircleImageView
               android:id="@+id/image_view_profile"
-              android:layout_width="96dp"
-              android:layout_height="96dp"
+              android:layout_width="150dp"
+              android:layout_height="150dp"
               android:src="@drawable/ic_man"
               android:layout_centerHorizontal="true"
-              app:civ_border_width="5dp"
+              android:contentDescription="@string/str_user_profile"
+              app:civ_border_width="15dp"
               app:civ_border_color="@color/white"/>
 
             <TextView
                 android:id="@+id/text_view_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
+                android:gravity="center"
                 android:layout_marginTop="10dp"
-                android:layout_centerHorizontal="true"
                 android:text="Saket Jha"
                 android:textSize="18sp"
                 android:textColor="@color/color_user_name"
@@ -39,22 +41,22 @@
 
             <TextView
                 android:id="@+id/text_view_description"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_centerHorizontal="true"
+                android:gravity="center"
                 android:text="25, Maharashtra,India"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_below="@+id/text_view_name"/>
 
             <TextView
                 android:id="@+id/text_view_status"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_centerHorizontal="true"
+                android:gravity="center"
                 android:text="Member Accepted"
                 android:textStyle="bold"
                 android:textColor="@color/black"
@@ -73,19 +75,49 @@
                 android:layout_below="@+id/text_view_status">
 
                 <ImageView
-                    android:id="@+id/image_view_accept"
+                    android:id="@+id/image_view_decline"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_decline"
+                    android:layout_marginEnd="20dp"
+                    android:contentDescription="@string/str_decline"
+                    android:background="?attr/selectableItemBackground"
+                   />
+
+                <TextView
+                    android:id="@+id/text_view_decline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/ic_accept"/>
+                    android:padding="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/str_decline"
+                    android:textSize="16sp"
+                    android:layout_below="@+id/image_view_decline"/>
+
+
 
                 <ImageView
-                    android:id="@+id/image_view_decline"
+                    android:id="@+id/image_view_accept"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_accept"
+                    android:layout_marginStart="20dp"
+                    android:contentDescription="@string/str_accept"
+                    android:layout_toEndOf="@+id/image_view_decline"
+                    android:background="?attr/selectableItemBackground"
+                    />
+
+                <TextView
+                    android:id="@+id/text_view_accept"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_decline"
-                    android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@+id/image_view_accept"/>
+                    android:padding="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/str_accept"
+                    android:layout_alignStart="@+id/image_view_accept"
+                    android:textSize="16sp"
+                    android:layout_below="@+id/image_view_accept"/>
+
 
             </RelativeLayout>
 
