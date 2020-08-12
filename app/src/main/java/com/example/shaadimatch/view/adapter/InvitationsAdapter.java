@@ -20,7 +20,7 @@ import static com.example.shaadimatch.app.Constants.REJECTED;
 
 /**
  * Created by SAKET on 11/08/2020
- * Adapter class for recyclerview item
+ * Adapter class for Recyclerview item
  */
 public class InvitationsAdapter extends RecyclerView.Adapter<InvitationsAdapter.ViewHolder> {
 

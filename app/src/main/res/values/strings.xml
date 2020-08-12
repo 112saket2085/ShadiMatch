@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Shaadi Match</string>
+    <string name="text_font_regular" translatable="false">Roboto-Regular.ttf</string>
+
 
     <!--Invitation Fragment-->
     <string name="str_invitations">Invitations</string>

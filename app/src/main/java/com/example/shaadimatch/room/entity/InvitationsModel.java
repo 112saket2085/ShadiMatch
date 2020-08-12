@@ -135,17 +135,21 @@ public class InvitationsModel {
         this.invitationStatus = invitationStatus;
     }
 
+    /**
+     * Method to get placeholder icon for profile picture.
+     * @return res Id for ImageView placeholder
+     */
     public int getProfilePlaceholderIcon() {
         if (!TextUtils.isEmpty(title)) {
             if (title.equalsIgnoreCase(Constants.TITLE_MALE)) {
                 return R.drawable.ic_man;
-            } else if (title.equalsIgnoreCase(Constants.TITLE_FEMALE)) {
+            } else if (title.equalsIgnoreCase(Constants.TITLE_MISS) || title.equalsIgnoreCase(Constants.TITLE_MS) || title.equalsIgnoreCase(Constants.TITLE_MRS)) {
                 return R.drawable.ic_woman;
             } else {
-                return R.drawable.ic_man;
+                return R.drawable.ic_user_profile;
             }
         } else {
-            return R.drawable.ic_man;
+            return R.drawable.ic_user_profile;
         }
     }
 

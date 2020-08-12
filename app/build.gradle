@@ -17,8 +17,7 @@ android {
         buildConfigField "String", "SCHEME", "\"${SCHEME}\""
         buildConfigField "String", "HOST_NAME", "\"${HOST_NAME}\""
         buildConfigField "String", "PORT_NAME", "\"${PORT_NAME}\""
-        buildConfigField "String", "SUPPORT_URL", "\"${SUPPORT_URL}\""
-        buildConfigField "String", "BASE_URL", "\"${SCHEME + HOST_NAME + ":" + PORT_NAME + SUPPORT_URL}\""
+        buildConfigField "String", "BASE_URL", "\"${SCHEME + HOST_NAME + ":" + PORT_NAME}\""
     }
 
     buildTypes {
@@ -41,6 +40,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    //Navigation Architecture
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
     //ButterKnife
@@ -59,4 +59,7 @@ dependencies {
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    //calligraphy
+    implementation 'io.github.inflationx:calligraphy3:3.1.1'
+    implementation 'io.github.inflationx:viewpump:2.0.3'
 }

@@ -40,6 +40,19 @@
         android:textSize="16sp"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/text_view_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textview_no_data_found"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/str_loading_application"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:visibility="gone" />
+
 
 
 </RelativeLayout>

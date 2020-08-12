@@ -3,13 +3,13 @@ package com.example.shaadimatch.rest;
 import com.example.shaadimatch.rest.response.ResponseView;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * Created by SAKET on 11/08/2020
- * Retrofit Api Interface
  */
 public interface ShadiApi {
 
-    @GET("?results=10")
-    Call<ResponseView.InvitationsResponseData> getInvitationList();
+    @GET("api/")
+    Call<ResponseView.InvitationsResponseData> getInvitationList(@Query("results") int count);
 }

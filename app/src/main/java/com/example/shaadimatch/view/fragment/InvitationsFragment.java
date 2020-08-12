@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.shaadimatch.R;
-import com.example.shaadimatch.app.Constants;
 import com.example.shaadimatch.rest.response.ResponseView;
 import com.example.shaadimatch.room.entity.InvitationsModel;
 import com.example.shaadimatch.view.adapter.InvitationsAdapter;
@@ -19,6 +18,7 @@ import com.example.shaadimatch.viewmodel.model.BaseApiResponse;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by SAKET on 11/08/2020
@@ -29,10 +29,11 @@ public class InvitationsFragment extends BaseFragment implements InvitationsAdap
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.textview_no_data_found) TextView textViewNoDataFound;
     @BindView(R.id.text_view_progress) TextView textViewProgress;
+    @BindView(R.id.text_view_retry) TextView textViewRetry;
     private InvitationsViewModel invitationsViewModel;
     private List<InvitationsModel> invitationsModelList = new ArrayList<>();
     private InvitationsAdapter invitationsAdapter;
-    private int selectedProfilePosition=-1;
+
 
     @Override
     int getLayoutId() {
@@ -49,7 +50,7 @@ public class InvitationsFragment extends BaseFragment implements InvitationsAdap
         super.onActivityCreated(savedInstanceState);
         initViewModel();
         initRecyclerView();
-        observeOfflineShadiMatchData();
+        observeOfflineInvitationsData();
     }
 
     private void initViewModel() {
@@ -65,18 +66,20 @@ public class InvitationsFragment extends BaseFragment implements InvitationsAdap
         recyclerView.setAdapter(invitationsAdapter);
     }
 
-    private void observedInvitationsData(boolean showProgress) {
+    /**
+     * Method to observe data changes from server
+     */
+    private void observedInvitationsData() {
         if (isNetworkAvailable()) {
-            if (showProgress) {
-                clearList();
-            }
+            clearList();
             showErrorDataInfo(View.GONE, "");
-            showProgressInfo(showProgress ? View.VISIBLE : View.GONE,getString(R.string.str_loading_application));
+            setRetryView(View.GONE,"");
+            showProgressInfo(View.VISIBLE,getString(R.string.str_loading_application));
             invitationsViewModel.getResponse(10).observe(getViewLifecycleOwner(), new Observer<BaseApiResponse.InvitationEvent>() {
                 @Override
                 public void onChanged(BaseApiResponse.InvitationEvent invitationEvent) {
                     showProgressInfo(View.GONE,"");
-                    if (invitationEvent.isSuccess()) {
+                    if (invitationEvent.isSuccess() && invitationEvent.getResponseView()!=null) {
                         List<ResponseView.InvitationsDataModel> modelList = invitationEvent.getResponseView().invitationDataModelList;
                         if (modelList != null && !modelList.isEmpty()) {
                             List<InvitationsModel> invitationsList = InvitationsModel.getInvitationsModelList(modelList);
@@ -91,7 +94,7 @@ public class InvitationsFragment extends BaseFragment implements InvitationsAdap
                     } else {
                         showShortToast(invitationEvent.getStatusDescription());
                         showErrorDataInfo(View.VISIBLE, invitationEvent.getStatusDescription());
-                        setRetryView(getString(R.string.str_retry));
+                        setRetryView(View.VISIBLE,getString(R.string.str_retry));
                     }
                 }
             });
@@ -100,27 +103,26 @@ public class InvitationsFragment extends BaseFragment implements InvitationsAdap
             showProgressInfo(View.GONE,"");
             if(invitationsModelList.isEmpty()) {
                 showErrorDataInfo(View.VISIBLE,getString(R.string.no_internet_available_text));
-                setRetryView(getString(R.string.str_retry));
+                setRetryView(View.VISIBLE,getString(R.string.str_retry));
             }
         }
     }
 
-    private void observeOfflineShadiMatchData() {
+
+    /**
+     * Method to observe data changes from room database
+     */
+    private void observeOfflineInvitationsData() {
         invitationsViewModel.getOfflineResponse().observe(getViewLifecycleOwner(), new Observer<List<InvitationsModel>>() {
             @Override
             public void onChanged(List<InvitationsModel> dataList) {
                 if(dataList!=null && !dataList.isEmpty()) {
                     invitationsModelList.clear();
                     invitationsModelList.addAll(dataList);
-                    if(selectedProfilePosition!=-1) {
-                        invitationsAdapter.notifyItemChanged(selectedProfilePosition);
-                    }
-                    else {
-                        invitationsAdapter.notifyDataSetChanged();
-                    }
+                    invitationsAdapter.notifyDataSetChanged();
                 }
                 else {
-                    observedInvitationsData(true);
+                    observedInvitationsData();
                 }
             }
         });
@@ -138,9 +140,9 @@ public class InvitationsFragment extends BaseFragment implements InvitationsAdap
         textViewProgress.setText(text);
     }
 
-    private void setRetryView(String text) {
-        textViewProgress.setVisibility(View.VISIBLE);
-        textViewProgress.setText(text);
+    private void setRetryView(int visibilty,String text) {
+        textViewRetry.setVisibility(visibilty);
+        textViewRetry.setText(text);
     }
 
     private void showErrorDataInfo(int visibility,String text) {
@@ -148,10 +150,10 @@ public class InvitationsFragment extends BaseFragment implements InvitationsAdap
         textViewNoDataFound.setText(text);
     }
 
-//    @OnClick(R.id.text_view_progress)
-//    public void onRetryClick(View view) {
-//        observedInvitationsData(true);
-//    }
+    @OnClick(R.id.text_view_retry)
+    public void onRetryClick(View view) {
+        observedInvitationsData();
+    }
 
     /**
      * Method to add data into database
@@ -171,14 +173,12 @@ public class InvitationsFragment extends BaseFragment implements InvitationsAdap
 
     @Override
     public void onAcceptClick(InvitationsModel invitationsModel) {
-        this.selectedProfilePosition = invitationsModelList.indexOf(invitationsModel);
         invitationsModel.setInvitationStatus(InvitationsModel.INVITATION_STATUS.ACCEPTED.getStatus());
         updateData(invitationsModel);
     }
 
     @Override
     public void onDeclineClick(InvitationsModel invitationsModel) {
-        this.selectedProfilePosition = invitationsModelList.indexOf(invitationsModel);
         invitationsModel.setInvitationStatus(InvitationsModel.INVITATION_STATUS.REJECTED.getStatus());
         updateData(invitationsModel);
     }

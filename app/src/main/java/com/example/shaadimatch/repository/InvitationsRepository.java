@@ -45,19 +45,19 @@ public class InvitationsRepository {
      */
     public LiveData<BaseApiResponse.InvitationEvent> getResponse(int count) {
         mutableLiveData = new MutableLiveData<>();
-        App.getInstance().getApiFactory().getShadiApi().getInvitationList().enqueue(new Callback<ResponseView.InvitationsResponseData>() {
+        App.getInstance().getApiFactory().getShadiApi().getInvitationList(count).enqueue(new Callback<ResponseView.InvitationsResponseData>() {
             @Override
             public void onResponse(@NotNull Call<ResponseView.InvitationsResponseData> call, @NotNull Response<ResponseView.InvitationsResponseData> response) {
                 if (response.isSuccessful()) {
                     mutableLiveData.setValue(new BaseApiResponse.InvitationEvent(true, "",response.body()));
                 } else {
-                    mutableLiveData.setValue(new BaseApiResponse.InvitationEvent(true, App.getInstance().getString(R.string.str_server_error),null));
+                    mutableLiveData.setValue(new BaseApiResponse.InvitationEvent(false, App.getInstance().getString(R.string.str_server_error),null));
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call<ResponseView.InvitationsResponseData> call, @NotNull Throwable t) {
-                mutableLiveData.setValue(new BaseApiResponse.InvitationEvent(true, App.getInstance().getString(R.string.str_server_error),null));
+                mutableLiveData.setValue(new BaseApiResponse.InvitationEvent(false, App.getInstance().getString(R.string.str_server_error),null));
             }
         });
         return mutableLiveData;

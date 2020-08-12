@@ -11,5 +11,7 @@ public interface Constants {
     String ACCEPTED = "ACCEPTED";
     String REJECTED = "REJECTED";
     String TITLE_MALE = "Mr";
-    String TITLE_FEMALE = "Miss";
+    String TITLE_MS= "Ms";
+    String TITLE_MISS = "Miss";
+    String TITLE_MRS = "Mrs";
 }

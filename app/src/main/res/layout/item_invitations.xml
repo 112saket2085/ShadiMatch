@@ -21,7 +21,6 @@
               android:id="@+id/image_view_profile"
               android:layout_width="150dp"
               android:layout_height="150dp"
-              android:src="@drawable/ic_man"
               android:layout_centerHorizontal="true"
               android:contentDescription="@string/str_user_profile"
               app:civ_border_width="15dp"
@@ -34,7 +33,7 @@
                 android:padding="5dp"
                 android:gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="Saket Jha"
+                android:text=""
                 android:textSize="18sp"
                 android:textColor="@color/color_user_name"
                 android:layout_below="@+id/image_view_profile"/>
@@ -46,7 +45,7 @@
                 android:padding="5dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="25, Maharashtra,India"
+                android:text=""
                 android:textSize="16sp"
                 android:layout_below="@+id/text_view_name"/>
 
@@ -57,8 +56,7 @@
                 android:padding="5dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="Member Accepted"
-                android:textStyle="bold"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:visibility="gone"
@@ -78,10 +76,9 @@
                     android:id="@+id/image_view_decline"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:src="@drawable/ic_decline"
                     android:layout_marginEnd="20dp"
                     android:contentDescription="@string/str_decline"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="@drawable/ic_decline_selector"
                    />
 
                 <TextView
@@ -90,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:layout_marginTop="10dp"
+                    android:layout_alignStart="@+id/image_view_decline"
                     android:text="@string/str_decline"
                     android:textSize="16sp"
                     android:layout_below="@+id/image_view_decline"/>
@@ -100,11 +98,10 @@
                     android:id="@+id/image_view_accept"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:src="@drawable/ic_accept"
                     android:layout_marginStart="20dp"
                     android:contentDescription="@string/str_accept"
                     android:layout_toEndOf="@+id/image_view_decline"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="@drawable/ic_accept_selector"
                     />
 
                 <TextView

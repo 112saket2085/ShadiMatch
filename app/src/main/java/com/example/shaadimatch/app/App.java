@@ -2,8 +2,14 @@ package com.example.shaadimatch.app;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.example.shaadimatch.R;
 import com.example.shaadimatch.rest.ApiFactory;
 import com.google.gson.Gson;
+
+import io.github.inflationx.calligraphy3.CalligraphyConfig;
+import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
+import io.github.inflationx.viewpump.ViewPump;
 
 /**
  * Created by SAKET on 11/08/2020
@@ -28,6 +34,21 @@ public class App extends Application {
         super.onCreate();
         initRest();
         initGson();
+        initCalligraphy();
+    }
+
+    /**
+     * Initialise calligraphy
+     */
+    private void initCalligraphy() {
+        //Custom Font
+        ViewPump.init(ViewPump.builder()
+                .addInterceptor(new CalligraphyInterceptor(
+                        new CalligraphyConfig.Builder()
+                                .setDefaultFontPath(getString(R.string.text_font_regular))
+                                .setFontAttrId(R.attr.fontPath)
+                                .build()))
+                .build());
     }
 
     /**
