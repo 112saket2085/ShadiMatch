@@ -64,7 +64,7 @@ public class InvitationsRepository {
     }
 
     /**
-     * @return LiveData Object that return list of all notes in room database.
+     * @return LiveData Object that return list of all invitations in room database.
      */
     public LiveData<List<InvitationsModel>> getShadiMatchList() {
         return shadiMatchesDAO.getInvitationsList();
@@ -91,7 +91,7 @@ public class InvitationsRepository {
 
 
     /**
-     * AddImageNote Async Task to add image note to room database.
+     * AddDataAsyncTask Async Task to add invitation to room database.
      */
     private static class AddDataAsyncTask extends AsyncTask<List<InvitationsModel>, Void, Void> {
         @SafeVarargs
@@ -105,7 +105,7 @@ public class InvitationsRepository {
 
 
     /**
-     * AddImageNote Async Task to add image note to room database.
+     * UpdateDataAsyncTask Async Task to update invitation data to room database.
      */
     private static class UpdateDataAsyncTask extends AsyncTask<InvitationsModel, Void, Void> {
         @Override

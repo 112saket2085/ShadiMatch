@@ -30,7 +30,7 @@ public abstract class RoomSqliteDatabase extends RoomDatabase {
 
     /**
      *
-     * @return NoteDAO instance to access CRUD operations.
+     * @return InvitationsDAO instance to access CRUD operations.
      */
     public abstract InvitationsDAO getInvitationsDAO();
 
